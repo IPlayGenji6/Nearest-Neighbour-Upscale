@@ -6,9 +6,10 @@ DEBUG_FLAGS = -g
 
 LDLIBS = -lm
 
-OBJS = NearestNeighbourUpscale.o lodepng.o NearestNeighbourUpscaleDriver.o
+BUILD_DIR = build
+OBJS = $(BUILD_DIR)/NearestNeighbourUpscale.o $(BUILD_DIR)/lodepng.o $(BUILD_DIR)/NearestNeighbourUpscaleDriver.o
 
-EXE = NearestNeighbourUpscale
+EXE = $(BUILD_DIR)/NearestNeighbourUpscale
 
 debug: CFLAGS = $(BASEFLAGS) $(DEBUG_FLAGS)
 debug: $(EXE)
@@ -19,14 +20,17 @@ release: $(EXE)
 $(EXE): $(OBJS)
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJS) -o $(EXE) $(LDLIBS)
 
-NearestNeighbourUpscale.o: NearestNeighbourUpscale.c NearestNeighbourUpscale.h
-	$(CC) $(CFLAGS) -c NearestNeighbourUpscale.c
+$(BUILD_DIR)/NearestNeighbourUpscale.o: NearestNeighbourUpscale.c NearestNeighbourUpscale.h | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c NearestNeighbourUpscale.c -o $(BUILD_DIR)/NearestNeighbourUpscale.o
 
-NearestNeighbourUpscaleDriver.o: NearestNeighbourUpscaleDriver.c NearestNeighbourUpscaleDriver.h
-	$(CC) $(CFLAGS) -c NearestNeighbourUpscaleDriver.c
+$(BUILD_DIR)/NearestNeighbourUpscaleDriver.o: NearestNeighbourUpscaleDriver.c NearestNeighbourUpscaleDriver.h | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c NearestNeighbourUpscaleDriver.c -o $(BUILD_DIR)/NearestNeighbourUpscaleDriver.o
 
-lodepng.o: LODEPNG/lodepng.c LODEPNG/lodepng.h
-	$(CC) $(CFLAGS) -c LODEPNG/lodepng.c
+$(BUILD_DIR)/lodepng.o: LODEPNG/lodepng.c LODEPNG/lodepng.h | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c LODEPNG/lodepng.c -o $(BUILD_DIR)/lodepng.o
+
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
 clean:
 	-rm -f $(OBJS)

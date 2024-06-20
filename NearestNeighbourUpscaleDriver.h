@@ -38,7 +38,7 @@ char *path_join(char* dir, char* file, int sizeFile);
 int getIntDigits(int num);
 
 // Save the image, do not overwrite any previous images.
-void saveImg(u_char *img, int dimX, int dimY);
+void saveImg(u_char *img, int dimX, int dimY, char* file);
 
 // Load the image from disk. (Handles RGBA (32bit) and RGB (24bit) without issue, so I use by default).
 bool loadImgRGBA(u_char** img, u_int* width, u_int* height, char* filename);
